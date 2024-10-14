@@ -63,7 +63,6 @@
             background-color: #f2f2f2;
         }
 
-        /* CSS for dropdown */
         select {
             width: 100%;
             padding: 10px;
@@ -81,7 +80,6 @@
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
-        /* Styling the label for dropdown */
         .label-contain {
             margin-top: 20px;
             font-size: 16px;
@@ -100,7 +98,6 @@
         <option value="ridge">Ridge Regression</option>
         <option value="nn">Neural Network</option>
         <option value="stacking">Stacking</option>
-
     </select>
     
     <label for="performance">Performance:</label>
@@ -144,8 +141,8 @@
             const batteryLife = document.getElementById('battery_life').value;
             const weight = document.getElementById('weight').value;
             const age = document.getElementById('age').value;
-            const algorithm = document.getElementById('algorithm').value; // Lấy giá trị thuật toán từ select
-        
+            const algorithm = document.getElementById('algorithm').value; 
+
             const data = {
                 performance: parseFloat(performance),
                 storage_capacity: parseFloat(storageCapacity),
@@ -153,9 +150,10 @@
                 battery_life: parseFloat(batteryLife),
                 weight: parseFloat(weight),
                 age: parseInt(age, 10),
-                algorithm: algorithm  // Thêm algorithm vào object data
+                algorithm: algorithm  // Gửi thuật toán được chọn
             };
-        
+
+            // Kiểm tra dữ liệu đầu vào
             if (isNaN(data.performance) || isNaN(data.storage_capacity) || isNaN(data.camera_quality) || 
                 isNaN(data.battery_life) || isNaN(data.weight) || isNaN(data.age)) {
                 Swal.fire({
@@ -166,9 +164,8 @@
                 });
                 return;
             }
-        
-            let endpoint = `/predict/${algorithm}`;  // Sử dụng dynamic route
-        
+
+            // Hiện thông báo loading
             Swal.fire({
                 title: 'Loading...',
                 text: 'Please wait while we process your request.',
@@ -176,8 +173,8 @@
                     Swal.showLoading();
                 }
             });
-        
-            fetch(endpoint, {
+
+            fetch('/predict', {  // Sử dụng endpoint `/predict`
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -191,9 +188,9 @@
                 return response.json();
             })
             .then(result => {
-                const predictedPrice = result['result'];
+                const predictedPrice = result['prediction'][0];  // Nhận kết quả dự đoán
                 const roundedPrice = predictedPrice.toFixed(2);
-        
+
                 const resultTable = document.getElementById('result-table');
                 resultTable.innerHTML += `
                     <tr>
@@ -206,7 +203,8 @@
                         <td>${roundedPrice} $</td>
                     </tr>
                 `;
-        
+
+                // Thông báo thành công
                 Swal.fire({
                     title: 'Success!',
                     text: 'Your prediction was successful.',
@@ -215,6 +213,7 @@
                 });
             })
             .catch(error => {
+                // Thông báo khi thất bại
                 Swal.fire({
                     title: 'Failed!',
                     text: 'An error occurred during the prediction.',
@@ -223,9 +222,6 @@
                 });
             });
         });
-        
     </script>
 </body>
 </html>
-
-       
