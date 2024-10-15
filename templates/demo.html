@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Price Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .label-contain {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phone Price Prediction</h1>
+    
+    <div class="label-contain">
+        <label for="algorithm">Algorithm</label>
+    </div>
+    <select id="algorithm">
+        <option value="linear">Linear Regression</option>
+        <option value="ridge">Ridge Regression</option>
+        <option value="nn">Neural Network</option>
+        <option value="stacking">Stacking</option>
+    </select>
+    
+    <label for="performance">Performance:</label>
+    <input type="text" id="performance" placeholder="Enter performance value">
+    
+    <label for="storage_capacity">Storage Capacity:</label>
+    <input type="text" id="storage_capacity" placeholder="Enter storage capacity">
+    
+    <label for="camera_quality">Camera Quality:</label>
+    <input type="text" id="camera_quality" placeholder="Enter camera quality">
+    
+    <label for="battery_life">Battery Life:</label>
+    <input type="text" id="battery_life" placeholder="Enter battery life">
+    
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" placeholder="Enter weight">
+    
+    <label for="age">Age:</label>
+    <input type="text" id="age" placeholder="Enter age of the phone">
+    
+    <button id="predict-btn">Predict Price</button>
+
+    <h2>Result</h2>
+    <table id="result-table" border="1">
+        <tr>
+            <th>Performance</th>
+            <th>Storage Capacity</th>
+            <th>Camera Quality</th>
+            <th>Battery Life</th>
+            <th>Weight</th>
+            <th>Age</th>
+            <th>Predicted Price</th>
+        </tr>
+    </table>
+
+    <script>
+        document.getElementById('predict-btn').addEventListener('click', function () {
+            const performance = document.getElementById('performance').value;
+            const storageCapacity = document.getElementById('storage_capacity').value;
+            const cameraQuality = document.getElementById('camera_quality').value;
+            const batteryLife = document.getElementById('battery_life').value;
+            const weight = document.getElementById('weight').value;
+            const age = document.getElementById('age').value;
+            const algorithm = document.getElementById('algorithm').value; 
+
+            const data = {
+                performance: parseFloat(performance),
+                storage_capacity: parseFloat(storageCapacity),
+                camera_quality: parseFloat(cameraQuality),
+                battery_life: parseFloat(batteryLife),
+                weight: parseFloat(weight),
+                age: parseInt(age, 10),
+                algorithm: algorithm  // Gửi thuật toán được chọn
+            };
+
+            // Kiểm tra dữ liệu đầu vào
+            if (isNaN(data.performance) || isNaN(data.storage_capacity) || isNaN(data.camera_quality) || 
+                isNaN(data.battery_life) || isNaN(data.weight) || isNaN(data.age)) {
+                Swal.fire({
+                    title: 'Input Error!',
+                    text: 'Please fill in all fields with valid numbers.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Hiện thông báo loading
+            Swal.fire({
+                title: 'Loading...',
+                text: 'Please wait while we process your request.',
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch('/predict', {  // Sử dụng endpoint `/predict`
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                const predictedPrice = result['prediction'][0];  // Nhận kết quả dự đoán
+                const roundedPrice = predictedPrice.toFixed(2);
+
+                const resultTable = document.getElementById('result-table');
+                resultTable.innerHTML += `
+                    <tr>
+                        <td>${performance}</td>
+                        <td>${storageCapacity}</td>
+                        <td>${cameraQuality}</td>
+                        <td>${batteryLife}</td>
+                        <td>${weight}</td>
+                        <td>${age}</td>
+                        <td>${roundedPrice} $</td>
+                    </tr>
+                `;
+
+                // Thông báo thành công
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Your prediction was successful.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            })
+            .catch(error => {
+                // Thông báo khi thất bại
+                Swal.fire({
+                    title: 'Failed!',
+                    text: 'An error occurred during the prediction.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
