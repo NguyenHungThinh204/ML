@@ -1,171 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dự đoán loại rượu</title>
+    <title>Phone Price Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-
-        .container {
-            width: 50%;
-            margin: auto;
-            overflow: hidden;
-        }
-
         h1 {
             text-align: center;
-            padding: 20px 0;
+            color: #333;
         }
-
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
+        label {
             display: block;
+            margin: 10px 0 5px;
             font-weight: bold;
         }
-
-        .form-group input {
+        input[type="text"] {
             width: 100%;
             padding: 8px;
-            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-
-        .form-group select {
+        button {
             width: 100%;
-            padding: 8px;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            background-color: #28a745;
-            color: white;
             padding: 10px;
+            background-color: #007bff;
+            color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
         }
-
-        .btn:hover {
-            background-color: #218838;
+        button:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
 
-        .result {
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .label-contain {
             margin-top: 20px;
-            font-size: 18px;
-            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Dự đoán loại rượu</h1>
-        <form id="prediction-form">
-            <div class="form-group">
-                <label for="feature1">Chỉ số độ axit cố định:</label>
-                <input type="number" step="any" name="fixedAcidity" required>
-            </div>
-            <div class="form-group">
-                <label for="feature2">Chỉ số độ axit dễ bay hơi:</label>
-                <input type="number" step="any" name="volatileAcidity" required>
-            </div>
-            <div class="form-group">
-                <label for="feature1">Chỉ số Axit Citric:</label>
-                <input type="number" step="any" name="citricAcid" required>
-            </div>
-            <div class="form-group">
-                <label for="feature2">Chỉ số Đường dư:</label>
-                <input type="number" step="any" name="residualSugar" required>
-            </div>
-            <div class="form-group">
-                <label for="feature1">Chỉ số clorua:</label>
-                <input type="number" step="any" name="chlorides" required>
-            </div>
-            <div class="form-group">
-                <label for="feature1">Chỉ số lưu huỳnh đioxit tự do:</label>
-                <input type="number" step="any" name="freeSulfurDioxide" required>
-            </div>
-            <div class="form-group">
-                <label for="feature2">Chỉ số tổng lưu huỳnh đioxit:</label>
-                <input type="number" step="any" name="totalSulfurDioxide" required>
-            </div>
-            <div class="form-group">
-                <label for="feature1">Chỉ số Tỉ trọng:</label>
-                <input type="number" step="any" name="density" required>
-            </div>
-            <div class="form-group">
-                <label for="feature2">Chỉ số PH:</label>
-                <input type="number" step="any" name="pH" required>
-            </div>
-            <div class="form-group">
-                <label for="feature1">Chỉ số sunfat:</label>
-                <input type="number" step="any" name="sulphates" required>
-            </div>
-            <div class="form-group">
-                <label for="feature2">Chỉ số nồng độ cồn:</label>
-                <input type="number" step="any" name="alcohol" required>
-            </div>
-            <div class="form-group">
-                <label for="model">Chọn mô hình:</label>
-                <select name="model">
-                    <option value="Linear Regression">Linear Regression</option>
-                    <option value="Lasso">Lasso Regression</option>
-                    <option value="Neuron Network">Neural Network</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn">Dự đoán</button>
-        </form>
-        <div id="prediction-result"></div>
-        <div id="error-message"></div>
+    <h1>Phone Price Prediction</h1>
+    
+    <div class="label-contain">
+        <label for="algorithm">Algorithm</label>
     </div>
+    <select id="algorithm">
+        <option value="linear">Linear Regression</option>
+        <option value="ridge">Ridge Regression</option>
+        <option value="nn">Neural Network</option>
+        <option value="stacking">Stacking</option>
+    </select>
+    
+    <label for="performance">Performance:</label>
+    <input type="text" id="performance" placeholder="Enter performance value">
+    
+    <label for="storage_capacity">Storage Capacity:</label>
+    <input type="text" id="storage_capacity" placeholder="Enter storage capacity">
+    
+    <label for="camera_quality">Camera Quality:</label>
+    <input type="text" id="camera_quality" placeholder="Enter camera quality">
+    
+    <label for="battery_life">Battery Life:</label>
+    <input type="text" id="battery_life" placeholder="Enter battery life">
+    
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" placeholder="Enter weight">
+    
+    <label for="age">Age:</label>
+    <input type="text" id="age" placeholder="Enter age of the phone">
+    
+    <button id="predict-btn">Predict Price</button>
+
+    <h2>Result</h2>
+    <table id="result-table" border="1">
+        <tr>
+            <th>Performance</th>
+            <th>Storage Capacity</th>
+            <th>Camera Quality</th>
+            <th>Battery Life</th>
+            <th>Weight</th>
+            <th>Age</th>
+            <th>Predicted Price</th>
+        </tr>
+    </table>
+
     <script>
-        document.getElementById('prediction-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Ngăn chặn tải lại trang
+        document.getElementById('predict-btn').addEventListener('click', function () {
+            const performance = document.getElementById('performance').value;
+            const storageCapacity = document.getElementById('storage_capacity').value;
+            const cameraQuality = document.getElementById('camera_quality').value;
+            const batteryLife = document.getElementById('battery_life').value;
+            const weight = document.getElementById('weight').value;
+            const age = document.getElementById('age').value;
+            const algorithm = document.getElementById('algorithm').value; 
 
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+            const data = {
+                performance: parseFloat(performance),
+                storage_capacity: parseFloat(storageCapacity),
+                camera_quality: parseFloat(cameraQuality),
+                battery_life: parseFloat(batteryLife),
+                weight: parseFloat(weight),
+                age: parseInt(age, 10),
+                algorithm: algorithm  // Gửi thuật toán được chọn
+            };
 
-            fetch('/predict', {
+            // Kiểm tra dữ liệu đầu vào
+            if (isNaN(data.performance) || isNaN(data.storage_capacity) || isNaN(data.camera_quality) || 
+                isNaN(data.battery_life) || isNaN(data.weight) || isNaN(data.age)) {
+                Swal.fire({
+                    title: 'Input Error!',
+                    text: 'Please fill in all fields with valid numbers.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Hiện thông báo loading
+            Swal.fire({
+                title: 'Loading...',
+                text: 'Please wait while we process your request.',
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch('/predict', {  // Sử dụng endpoint `/predict`
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById('error-message').innerText = data.error;
-                        document.getElementById('prediction-result').innerText = '';
-                    } else {
-                        document.getElementById('prediction-result').innerText = `Dự đoán Chất lượng rượu: ${data.prediction}`;
-                        document.getElementById('error-message').innerText = '';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('error-message').innerText = 'Đã xảy ra lỗi: ' + error;
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                const predictedPrice = result['prediction'][0];  // Nhận kết quả dự đoán
+                const roundedPrice = predictedPrice.toFixed(2);
+
+                const resultTable = document.getElementById('result-table');
+                resultTable.innerHTML += `
+                    <tr>
+                        <td>${performance}</td>
+                        <td>${storageCapacity}</td>
+                        <td>${cameraQuality}</td>
+                        <td>${batteryLife}</td>
+                        <td>${weight}</td>
+                        <td>${age}</td>
+                        <td>${roundedPrice} $</td>
+                    </tr>
+                `;
+
+                // Thông báo thành công
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Your prediction was successful.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
                 });
+            })
+            .catch(error => {
+                // Thông báo khi thất bại
+                Swal.fire({
+                    title: 'Failed!',
+                    text: 'An error occurred during the prediction.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
         });
     </script>
 </body>
-
 </html>
