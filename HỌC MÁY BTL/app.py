@@ -21,16 +21,15 @@ def demo():
     return render_template('demo.html')
 
 # Route for prediction
-@app.route('/predict', methods=['POST'])
-def predict():
-    # Get data from the request
-    data = request.get_json()
-    algorithm = data['algorithm']
-
+@app.route('/predict/<algorithm>', methods=['POST'])
+def predict(algorithm):
     # Get the corresponding model
     model = models.get(algorithm)
     if not model:
         return jsonify({'error': 'Algorithm not supported'}), 400
+
+    # Get data from the request
+    data = request.get_json()
 
     # Extract input features from the data
     try:
@@ -42,22 +41,22 @@ def predict():
         age = int(data['age'])
     except ValueError as e:
         return jsonify({'error': 'Invalid input values'}), 400
+ # Create a feature array for prediction
+    features = np.array([[performance, storage_capacity, camera_quality, battery_life, weight, age]])
+    if algorithm == 'nn':
+        scaler = joblib.load('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/scaler.pkl')
+        features = scaler.transform(features)
+    try:
+        # Make the prediction
+        prediction = model.predict(features)
 
-    # Create a feature array for prediction
-    features_list = [performance, storage_capacity, camera_quality, battery_life, weight, age]
-    columns = ['Performance', 'Storage capacity', 'Camera quality', 'Battery life', 'Weight', 'age']
-    features = pd.DataFrame([features_list], columns=columns)
-
-    # Use the selected model for prediction
-    prediction = model.predict(features)
-
-
-    try:    # Return the result as a JSON response
+        # Return the result as a JSON response
         return jsonify({
-            'prediction': prediction.tolist(),
+            'result': prediction.tolist()[0],  # Trả về kết quả
         })
     except Exception as e:
         print(f"Error during prediction: {e}")
         return jsonify({'error': 'Prediction failed'}), 500
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 5000,debug=True)
+    app.run(debug=True)
