@@ -14,9 +14,11 @@ data = pd.read_csv('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/SmartphonePrice.
 
 # Xử lý dữ liệu thiếu
 data = data.dropna()
+data = data[data['Price'] >= 0]
+
 
 # Chọn thuộc tính đầu vào và biến mục tiêu
-X = data[['Performance','Storage capacity','Camera quality','Battery life','Weight','age']]
+X = data[['Performance', 'Storage capacity', 'Camera quality', 'Battery life', 'Weight', 'age']]
 y = data['Price']
 
 # Chia dữ liệu thành tập train và test (85% train, 15% test)
@@ -32,7 +34,7 @@ X_valid = scaler.transform(X_valid)
 X_test = scaler.transform(X_test)
 
 # Xây dựng mô hình MLPRegressor
-model = MLPRegressor(hidden_layer_sizes=(50, 50), activation='relu', solver='adam', max_iter=1000, random_state=42)
+model = MLPRegressor(hidden_layer_sizes=(64, 64), activation='relu', solver='adam', max_iter=1000, random_state=42)
 
 # Huấn luyện mô hình
 model.fit(X_train, y_train)
@@ -98,3 +100,5 @@ plt.tight_layout()
 plt.show()
 import joblib
 joblib.dump(model, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/neural_network_model.pkl')
+joblib.dump(scaler, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/scaler.pkl')
+
