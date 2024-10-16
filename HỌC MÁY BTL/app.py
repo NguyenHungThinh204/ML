@@ -44,7 +44,7 @@ def predict(algorithm):
  # Create a feature array for prediction
     features = np.array([[performance, storage_capacity, camera_quality, battery_life, weight, age]])
     if algorithm == 'nn':
-        scaler = joblib.load('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/scaler.pkl')
+        scaler = joblib.load('HỌC MÁY BTL/scaler.pkl')
         features = scaler.transform(features)
     try:
         # Make the prediction
