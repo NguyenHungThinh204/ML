@@ -9,7 +9,7 @@ import joblib
 import matplotlib.pyplot as plt
 
 # Đọc dữ liệu
-data = pd.read_csv('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/SmartphonePrice.csv')
+data = pd.read_csv('HỌC MÁY BTL/SmartphonePrice.csv')
 
 # Xử lý dữ liệu thiếu
 data = data.dropna()
@@ -101,4 +101,4 @@ plt.grid()
 plt.tight_layout()
 plt.show()
 import joblib
-joblib.dump(stacking_model, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/stacking_neural_ridge_linear_model.pkl')
+joblib.dump(stacking_model, 'HỌC MÁY BTL/stacking_neural_ridge_linear_model.pkl')
