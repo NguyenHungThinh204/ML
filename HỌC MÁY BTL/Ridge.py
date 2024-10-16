@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 # Tải dữ liệu Auto MPG với tên cột đầy đủ
 url = "https://www.kaggle.com/datasets/sadcougarx/cellphone-predictions/data"
-data = pd.read_csv('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/SmartphonePrice.csv')
+data = pd.read_csv('HỌC MÁY BTL/SmartphonePrice.csv')
 
 # Xử lý dữ liệu thiếu
 data = data.dropna()
@@ -98,4 +98,4 @@ plt.title('Dữ liệu Test')
 plt.tight_layout()
 plt.show()
 import joblib
-joblib.dump(model, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/ridge_regression_model.pkl')
+joblib.dump(model, 'HỌC MÁY BTL/ridge_regression_model.pkl')
