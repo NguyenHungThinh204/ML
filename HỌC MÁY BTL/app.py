@@ -10,7 +10,7 @@ app = Flask(__name__)
 models = {
     'linear': joblib.load('HỌC MÁY BTL/linear_regression_model.pkl'),
     'ridge': joblib.load('HỌC MÁY BTL/ridge_regression_model.pkl'),
-    'nn': joblib.load('HỌC MÁY BTL/neural_network_model.pkl'),
+    'nn': joblib.load('HỌC MÁY BTL/scaler.pkl'),
     'stacking': joblib.load('HỌC MÁY BTL/stacking_neural_ridge_linear_model.pkl')
 }
 
