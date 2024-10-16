@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 url = "https://www.kaggle.com/datasets/sadcougarx/cellphone-predictions/data"
 
 # Giả sử bạn đã tải về và đọc nó như sau
-data = pd.read_csv('D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/SmartphonePrice.csv')
+data = pd.read_csv('HỌC MÁY BTL/SmartphonePrice.csv')
 
 # Xử lý dữ liệu thiếu
 data = data.dropna()
@@ -99,6 +99,6 @@ plt.title('Dữ liệu Test')
 plt.tight_layout()
 plt.show()
 import joblib
-joblib.dump(model, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/neural_network_model.pkl')
-joblib.dump(scaler, 'D:/Học máy/HỌC MÁY BTL/HỌC MÁY BTL/scaler.pkl')
+joblib.dump(model, 'HỌC MÁY BTL/neural_network_model.pkl')
+joblib.dump(scaler, 'HỌC MÁY BTL/scaler.pkl')
 
