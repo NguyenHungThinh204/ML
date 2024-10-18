@@ -11,6 +11,7 @@ data = pd.read_csv('HỌC MÁY BTL/SmartphonePrice.csv')
 
 # Xử lý dữ liệu thiếu
 data = data.dropna()
+data = data[data['Price'] >= 0]
 
 # Chọn thuộc tính đầu vào và biến mục tiêu
 X = data[['Performance','Storage capacity','Camera quality','Battery life','Weight','age']]
