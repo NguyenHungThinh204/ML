@@ -26,15 +26,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random
 # Từ tập train, tách thêm tập validation (15% của tập data)
 X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.2142, random_state=42) 
 
-# Số lượng mẫu trong từng tập dữ liệu
-num_train_samples = len(X_train)
-num_test_samples = len(X_test)
-num_val_samples = len(X_valid)
-
-print("Số mẫu trong tập train:", num_train_samples)
-print("Số mẫu trong tập test:", num_test_samples)
-print("Số mẫu trong tập validation:", num_val_samples)
-
 # Thiết lập phạm vi giá trị alpha cho GridSearchCV
 alpha_values = np.logspace(-4, 4, 50)  # Các giá trị alpha từ 10^-4 đến 10^4
 
