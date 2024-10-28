@@ -12,15 +12,28 @@ data = pd.read_csv('HỌC MÁY BTL/SmartphonePrice.csv')
 # Xử lý dữ liệu thiếu
 data = data.dropna()
 
+# Xử lý dữ liệu
+data = data[data['Price'] >= 0]
+
 # Chọn thuộc tính đầu vào và biến mục tiêu
 X = data[['Performance','Storage capacity','Camera quality','Battery life','Weight','age']]
 y = data['Price']
+
 
 # Chia dữ liệu thành tập train và test (85% train, 15% test)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
 
 # Từ tập train, tách thêm tập validation (15% của tập data)
 X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.2142, random_state=42) 
+
+# Số lượng mẫu trong từng tập dữ liệu
+num_train_samples = len(X_train)
+num_test_samples = len(X_test)
+num_val_samples = len(X_valid)
+
+print("Số mẫu trong tập train:", num_train_samples)
+print("Số mẫu trong tập test:", num_test_samples)
+print("Số mẫu trong tập validation:", num_val_samples)
 
 # Thiết lập phạm vi giá trị alpha cho GridSearchCV
 alpha_values = np.logspace(-4, 4, 50)  # Các giá trị alpha từ 10^-4 đến 10^4
@@ -34,7 +47,7 @@ grid_search.fit(X_train, y_train)
 best_alpha = grid_search.best_params_['alpha']
 print(f"Giá trị alpha tốt nhất: {best_alpha}")
 
-# Huấn luyện mô hình Ridge Regression với alpha tốt nhất
+# Huấn luyện mô hình Ridge Regression với alpha tốt nhất và huấn luyện trên tập train
 model = Ridge(alpha=best_alpha)
 model.fit(X_train, y_train)
 
@@ -43,11 +56,12 @@ y_train_pred = model.predict(X_train)
 y_valid_pred = model.predict(X_valid)
 y_test_pred = model.predict(X_test)
 
-# Tính toán lỗi
+# Tính toán rmse
 train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred))
 valid_rmse = np.sqrt(mean_squared_error(y_valid, y_valid_pred))
 test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
 
+#Tính toán mae
 train_mae = mean_absolute_error(y_train, y_train_pred)
 valid_mae = mean_absolute_error(y_valid, y_valid_pred)
 test_mae = mean_absolute_error(y_test, y_test_pred)
@@ -65,10 +79,10 @@ results = pd.DataFrame({
     'R^2': [train_r2, valid_r2, test_r2]
 })
 
-print("Kết quả lỗi, MAE và R^2:")
+print("RMSE, MAE và R^2:")
 print(results)
 
-# Biểu đồ dự đoán so với giá trị thực
+#Vẽ biểu đồ
 plt.figure(figsize=(18, 6))
 
 # Biểu đồ dự đoán so với giá trị thực cho dữ liệu train
